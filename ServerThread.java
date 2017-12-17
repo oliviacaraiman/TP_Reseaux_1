@@ -77,7 +77,7 @@ public class ServerThread extends Thread {
 				out = "Member " + this.id + " : " + out;
 				System.out.println(out);
 
-				for (int i = 0; (i < listThreadsSending.size() && (i != id)); i++) {
+				for (int i = 0; (i < listThreadsSending.size()); i++) {
 					listThreadsSending.get(i).runSending(out);
 				}
 
