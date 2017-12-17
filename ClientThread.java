@@ -51,35 +51,6 @@ public class ClientThread extends Thread {
 
 		try {
 			
-		//	ic.messageArea.append(toPrint + "\n");
-			
-//			BufferedReader stdIn = null;
-//			stdIn = new BufferedReader(new InputStreamReader(System.in));
-			//stdIn = new BufferedReader(ic.out);
-			
-//			PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
-//			String toPrint = "";
-
-			
-			//if (msg == null) {
-//				while (true) {
-//					//toPrint = ic.out;
-//					//System.out.println("kjdf: " + toP);
-//					//toPrint = stdIn.readLine(); // lit depuis le clavier
-//					System.out.println("Information read from stdIn");
-//					if (toPrint.equals("exit")) {
-//						keepOn = false;
-//						break;
-//					}
-					//ic.messageArea.append(toPrint + "\n");
-					//socOut.println(toPrint);
-				//}
-			/*} else {
-				toPrint = msg;
-				socOut.println(toPrint);
-			}*/
-
-			// ecrit dans le socket
 
 		} catch (Exception e) {
 			System.err.println("Error in runSending:" + e);
@@ -87,20 +58,16 @@ public class ClientThread extends Thread {
 	}
 
 	public void runReceiving() {
-		//String out = "";
 		try {
 			System.out.println("received");
 			BufferedReader socIn = null;
 			socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 			while (true) {
-				//String out = "";
 				String out = socIn.readLine(); // lit depuis le socket
-
+				//writes received messages in the chat window
 				ic.messageArea.append(out + "\n");
 				System.out.println(out);
-
-				//history.add(out);
 			}
 
 		} catch (Exception e) {

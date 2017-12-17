@@ -10,10 +10,14 @@ import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
 
+/**
+ * 
+ *
+ */
 public class ServerThread extends Thread {
 	static LinkedList<ServerThread> listThreadsSending = new LinkedList<>();
 	static LinkedList<ServerThread> listThreadsReceiving = new LinkedList<>();
-	static LinkedList<String> history = new LinkedList<>();
+	static LinkedList<String> history = new LinkedList<>(); //history of messages
 
 	private Socket clientSocket;
 	private int id;
@@ -33,12 +37,8 @@ public class ServerThread extends Thread {
 	}
 
 	/**
-	 * receives a request from client then sends an echo to the client
-	 * 
-	 * @param clientSocket
-	 *            the client socket
-	 **/
-
+	 * depending on sender value (true/false), choose the right method
+	 */
 	public void run() {
 
 		if (sender) {
@@ -48,54 +48,53 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	/**
+	 * write in the socket
+	 * 
+	 * @param msg: message to write in the socket
+	 */
+
 	public void runSending(String msg) {
 
 		try {
-					//BufferedReader stdIn = null;
-			//stdIn = new BufferedReader(new InputStreamReader(System.in));
 			PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
-			
-			if(msg!= null) socOut.println(msg);
-			// ecrit dans le socket
+			if (msg != null)
+				socOut.println(msg);
 
 		} catch (Exception e) {
 			System.err.println("Error in runSending:" + e);
 		}
 	}
 
+	/**
+	 * read from the socket 
+	 */
 	public void runReceiving() {
-		// String out = "";
-		try {
-			BufferedReader socIn = null;
-			socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
+	try {
+		BufferedReader socIn = null;
+		socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+	
 			while (true) {
-				// String out = "";
-				String out = socIn.readLine(); // lit depuis le socket
+				String out = socIn.readLine(); // read from the socket
 
-				// out = out + socLine;
+				// id attribution to each memeber of the conversation
 				out = "Member " + this.id + " : " + out;
-				System.out.println(out);
 
+				// send the read information to all members connected to the chat
 				for (int i = 0; (i < listThreadsSending.size()); i++) {
 					listThreadsSending.get(i).runSending(out);
 				}
 
-				//history.add(out);
-				//File file = new File("C:\\Users\\ocaraiman\\workspace\\Chat\\history.txt");
-				//FileOutputStream save = new FileOutputStream(file);
-				FileWriter fw = new FileWriter("D:\\java\\TP1_Reseaux\\src\\history.txt",true);
+				// creating a history file with all messages
+				FileWriter fw = new FileWriter("history.txt",true);
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(out+"\n");
-				bw.newLine();
 				bw.close();
-				//save.close();
+			} 
+		}catch (Exception e) {
+				System.err.println("Error in runReceiving:" + e);
 			}
 
-		} catch (Exception e) {
-			System.err.println("Error in runReceiving:" + e);
 		}
 
 	}
-
-}

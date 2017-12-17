@@ -35,9 +35,6 @@ public class Client {
         PrintStream socOut = null;
         BufferedReader stdIn = null;
         BufferedReader socIn = null;
-        
-        
-       
 
         // args doit prendre comme arg l'adresse IP et le port 
         // add IP : localhost
@@ -48,14 +45,9 @@ public class Client {
         }
 
         try {
-      	    // creation socket ==> connexion
+      	    // creates the socket ==> connection
       	    echoSocket = new Socket(args[0],new Integer(args[1]).intValue());
-		    /*socIn = new BufferedReader(
-		    		          new InputStreamReader(echoSocket.getInputStream()));    
-		    socOut= new PrintStream(echoSocket.getOutputStream());
-		    stdIn = new BufferedReader(new InputStreamReader(System.in));
-		    System.out.println("Connected to the server");*/
-      	    
+		          	    
       	  InterfaceClient ic = new InterfaceClient(echoSocket);
           ic.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
           ic.frame.setVisible(true);
@@ -68,8 +60,8 @@ public class Client {
 			ClientThread ctReceivingFromServer = new ClientThread(echoSocket,false,ic);
 			ctReceivingFromServer.start();
 			
-			//recuperation de l'historique
-			File file = new File("D:\\java\\TP1_Reseaux\\src\\history.txt");
+			//getting the history
+			File file = new File("history.txt");
 			if (!file.exists()) 
 			{		
 				file.createNewFile();
@@ -78,20 +70,12 @@ public class Client {
 			FileInputStream load = new FileInputStream(file);
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(load));
-	        //StringBuilder previousContent = new StringBuilder();
 	        String line;
 	        while ((line = reader.readLine()) != null) {
-	            //previousContent.append(line);
+	        	//writes the history in the chat window
 	        	ic.messageArea.append(line + "\n");
 	        	System.out.println(line);
 	        }
-			        
-	        /*String toAdd = previousContent.toString();
-	        
-	        //String delims = "\n+";
-	        String[] tokens = toAdd.split(System.getProperty("line.separator"));
-	        for(int i =0; i < tokens.length; i++) System.out.println(tokens[i]);*/
-	        
 	        reader.close();
 			load.close();
 			

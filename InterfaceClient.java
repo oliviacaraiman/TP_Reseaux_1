@@ -20,11 +20,16 @@ public class InterfaceClient {
 	JFrame frame = new JFrame("Chat");
 	JTextField textField = new JTextField(40);
 	JTextArea messageArea = new JTextArea(40, 40);
+	
+	/**
+	 * interface constructor
+	 * @param clientSocket 
+	 * @throws IOException
+	 */
 
 	public InterfaceClient(Socket clientSocket) throws IOException {
 		
 		out = new PrintStream(clientSocket.getOutputStream());
-		// Layout GUI
 		textField.setEditable(true);
 		textField.setSelectedTextColor(Color.BLUE);
 		messageArea.setEditable(false);
@@ -36,10 +41,10 @@ public class InterfaceClient {
 		textField.addActionListener(new ActionListener() {
 			/**
 			 * @param e
-			 *            Envoie le message lorsque le client appuie sur la
-			 *            touche Entrée.
+			 *  sends the message when the user touches "ENTER"
 			 */
 			public void actionPerformed(ActionEvent e) {
+				// writes the message on the socket 
 				out.println(textField.getText());
 				textField.setText("");
 			}
